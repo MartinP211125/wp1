@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit/Add book</title>
+</head>
+<body>
+<form method="POST" action="/books/add">
+    <!-- Dropdown menu for selecting existing books -->
+    <input type="hidden" id="bookId" name="bookId" th:value="${bookId}" />
+    <label for="title">Title:</label>
+    <select id="title" name="title">
+        <option th:each="book : ${books}" th:value="${book.getTitle()}" th:text="${book.getTitle()}"></option>
+    </select>
+    <label for="id">Id:</label>
+    <select id="id" name="id">
+        <option th:each="book : ${books}" th:value="${book.getBookStore().getId()}" th:text="${book.getBookStore().getId()}"></option>
+    </select>
+    <label for="isbn">Isbn:</label>
+    <select id="isbn" name="isbn">
+        <option th:each="book : ${books}" th:value="${book.getIsbn()}" th:text="${book.getIsbn()}"></option>
+    </select>
+    <label for="genre">Genre:</label>
+    <select id="genre" name="genre">
+        <option th:each="book : ${books}" th:value="${book.getGenre()}" th:text="${book.getGenre()}"></option>
+    </select>
+    <label for="year">Year:</label>
+    <select id="year" name="year">
+        <option th:each="book : ${books}" th:value="${book.getYear()}" th:text="${book.getYear()}"></option>
+    </select>
+    <br>
+
+    <input type="submit" value="Save Changes">
+</form>
+</body>
+</html>
