@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Review</title>
+</head>
+<body>
+    <form method="post" action="/books/review/add">
+        <input type="hidden" id="bookId" name="bookId" th:value="${bookId}" />
+        <label for="selectNumber">Select a number:</label>
+        <select id="selectNumber" name="score">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+        </select>
+        <input type="text" name="description">
+        <input type="datetime-local" name="timestamp"/>
+
+        <input type="submit" value="Add Review">
+    </form>
+</body>
+</html>

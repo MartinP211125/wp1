@@ -6,6 +6,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import mk.finki.ukim.mk.repository.jpa.ReviewRepository;
 import mk.finki.ukim.mk.service.AuthorService;
 import mk.finki.ukim.mk.service.BookService;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,11 +23,13 @@ public class BookDetails extends HttpServlet {
     public final SpringTemplateEngine springTemplateEngine;
     public final BookService bookService;
     public final AuthorService authorService;
+    public final ReviewRepository repository;
 
-    public BookDetails(SpringTemplateEngine springTemplateEngine, BookService bookService, AuthorService authorService) {
+    public BookDetails(SpringTemplateEngine springTemplateEngine, BookService bookService, AuthorService authorService, ReviewRepository repository) {
         this.springTemplateEngine = springTemplateEngine;
         this.bookService = bookService;
         this.authorService = authorService;
+        this.repository = repository;
     }
 
     @Override
@@ -35,9 +38,10 @@ public class BookDetails extends HttpServlet {
         WebContext context = new WebContext(webExchange);
         String author = req.getParameter("authorId");
         String bookIsbn = req.getParameter("bookIsbn");
-        bookService.addAuthorToBook(Long.parseLong(author), bookIsbn);
+        bookService.addAuthorToBook(bookService.findBookByIsbn(bookIsbn).getId(), Long.parseLong(author));
         context.setVariable("book", bookService.findBookByIsbn(bookIsbn));
         context.setVariable("authors", bookService.findBookByIsbn(bookIsbn).getAuthorList());
+        context.setVariable("review", repository.findByBookID(bookService.findBookByIsbn(bookIsbn).getId()).getScore());
         springTemplateEngine.process("bookDetails.html", context, resp.getWriter());
     }
 }

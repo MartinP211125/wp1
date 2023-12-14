@@ -2,11 +2,15 @@ package mk.finki.ukim.mk.web.controller;
 
 
 import jakarta.annotation.Nullable;
+import mk.finki.ukim.mk.model.Review;
 import mk.finki.ukim.mk.service.BookService;
 import mk.finki.ukim.mk.service.BookStoreService;
+import mk.finki.ukim.mk.service.ReviewService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
 
 @Controller
 @RequestMapping("/books")
@@ -14,16 +18,19 @@ public class BookController {
 
     public final BookService bookService;
     public final BookStoreService bookStoreService;
+    public final ReviewService reviewService;
 
-    public BookController(BookService bookService, BookStoreService bookStoreService) {
+    public BookController(BookService bookService, BookStoreService bookStoreService, ReviewService reviewService) {
         this.bookService = bookService;
         this.bookStoreService = bookStoreService;
+        this.reviewService = reviewService;
     }
 
 
     @GetMapping
     public String getBooksPage(@RequestParam(required = false) String error, Model model){
         model.addAttribute("books", bookService.listBooks());
+        model.addAttribute("review", reviewService);
         return "listBooks";
     }
 
@@ -52,6 +59,20 @@ public class BookController {
         model.addAttribute("bookId", bookId);
         return "editBook";
     }
+
+    @GetMapping("/review/{bookId}")
+    public String Review(@PathVariable Long bookId, Model model){
+        model.addAttribute("bookId", bookId);
+        return "review";
+    }
+
+    @PostMapping("review/add")
+    public String addReview(@RequestParam Long bookId, @RequestParam int score, @RequestParam String description, @RequestParam LocalDateTime timestamp, Model model){
+        Review rev = new Review(score, description, bookService.findBookById(bookId), timestamp);
+        reviewService.save(rev);
+        return "redirect:/books";
+    }
+
     @GetMapping("/add-form")
     public String getAddBookPage(Model model){
         model.addAttribute("books", bookService.listBooks());
