@@ -23,4 +23,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     void deleteById(Long aLong);
 
     boolean existsReviewByBookId(Long bookId);
+
+    List<Review> findAll();
 }

@@ -37,8 +37,29 @@
                </a>
                <br/></li>
        </ul>
+       <label for="time">Filter by newer then</label>
+       <input type="datetime-local" id="time" name="from"/>
+       <br/>
+       <label for="time2">Filter by older then</label>
+       <input type="datetime-local" id="time2" name="to"/>
+       <br/>
+
+       <button type="button" onclick="filterBooks()">Filter</button>
+       <br/>
        <input type='submit' value='Submit'>
    </form>
+    <script>
+        function filterBooks() {
+            var timeValue = document.getElementById('time').value;
+            var time2Value = document.getElementById('time2').value;
+
+            // Construct the URL with the captured values
+            var url = '/books/filter?from=' + encodeURIComponent(timeValue) + '&to=' + encodeURIComponent(time2Value);
+
+            // Redirect to the constructed URL
+            window.location.href = url;
+        }
+    </script>
 </main>
 </body>
 </html>

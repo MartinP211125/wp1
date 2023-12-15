@@ -6,6 +6,7 @@ import mk.finki.ukim.mk.model.Review;
 import mk.finki.ukim.mk.service.BookService;
 import mk.finki.ukim.mk.service.BookStoreService;
 import mk.finki.ukim.mk.service.ReviewService;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -80,4 +81,10 @@ public class BookController {
         return "editBook";
     }
 
+    @GetMapping("/filter")
+    public String filterByInterval(@RequestParam("from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime from, @RequestParam("to") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime to, Model model) {
+        model.addAttribute("books", reviewService.getBookInInterval(from, to));
+        model.addAttribute("review", reviewService);
+        return "listBooks";
+    }
 }
