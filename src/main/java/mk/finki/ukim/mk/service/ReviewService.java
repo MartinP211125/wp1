@@ -7,13 +7,14 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 public interface ReviewService {
 
     public List<Book> getBookInInterval(LocalDateTime from, LocalDateTime to);
 
     <S extends Review> S save(S entity);
-    Review findByBookID(@Param("bookId") Long bookId);
+    List<Review> findByBookID(@Param("bookId") Long bookId);
 
     void deleteById(Long aLong);
 
@@ -21,4 +22,5 @@ public interface ReviewService {
     public List<Review> getReviewInInterval(LocalDateTime from, LocalDateTime to);
 
     public List<Review> findAll();
+    public Optional<Book> getBestRatedBook();
 }

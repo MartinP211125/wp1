@@ -2,6 +2,7 @@ package mk.finki.ukim.mk.web.controller;
 
 
 import jakarta.annotation.Nullable;
+import mk.finki.ukim.mk.model.Book;
 import mk.finki.ukim.mk.model.Review;
 import mk.finki.ukim.mk.service.BookService;
 import mk.finki.ukim.mk.service.BookStoreService;
@@ -12,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/books")
@@ -31,7 +33,8 @@ public class BookController {
     @GetMapping
     public String getBooksPage(@RequestParam(required = false) String error, Model model){
         model.addAttribute("books", bookService.listBooks());
-        model.addAttribute("review", reviewService);
+        model.addAttribute("review", reviewService.findAll());
+        model.addAttribute("Flag", Boolean.FALSE);
         return "listBooks";
     }
 
@@ -84,7 +87,19 @@ public class BookController {
     @GetMapping("/filter")
     public String filterByInterval(@RequestParam("from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime from, @RequestParam("to") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime to, Model model) {
         model.addAttribute("books", reviewService.getBookInInterval(from, to));
-        model.addAttribute("review", reviewService);
+        model.addAttribute("review", reviewService.findAll());
+        model.addAttribute("Flag", Boolean.FALSE);
         return "listBooks";
     }
+
+    @GetMapping("/best-review")
+    public String getBestReviewBook(Model model){
+        Optional<Book> book = reviewService.getBestRatedBook();
+        model.addAttribute("book", book);
+        model.addAttribute("review", reviewService);
+        model.addAttribute("Flag", Boolean.TRUE);
+        return "listBooks";
+    }
+
 }
+// koja kniga ima najgolem average score

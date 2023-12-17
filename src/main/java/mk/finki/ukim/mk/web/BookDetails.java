@@ -6,6 +6,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import mk.finki.ukim.mk.model.Review;
 import mk.finki.ukim.mk.repository.jpa.ReviewRepository;
 import mk.finki.ukim.mk.service.AuthorService;
 import mk.finki.ukim.mk.service.BookService;
@@ -41,7 +42,7 @@ public class BookDetails extends HttpServlet {
         bookService.addAuthorToBook(bookService.findBookByIsbn(bookIsbn).getId(), Long.parseLong(author));
         context.setVariable("book", bookService.findBookByIsbn(bookIsbn));
         context.setVariable("authors", bookService.findBookByIsbn(bookIsbn).getAuthorList());
-        context.setVariable("review", repository.findByBookID(bookService.findBookByIsbn(bookIsbn).getId()).getScore());
+        context.setVariable("review", repository.findByBookID(bookService.findBookByIsbn(bookIsbn).getId()).stream().map(Review::getScore).findFirst());
         springTemplateEngine.process("bookDetails.html", context, resp.getWriter());
     }
 }

@@ -22,9 +22,8 @@
        <ul>
            <li th:each="book:${books}"><input type="radio" name="bookIsbn" th:value="${book.getIsbn()}">
                <th:block th:text="${book.getTitle()}"></th:block> <th:block th:text="${book.getBookStore().getName()}"></th:block>&emsp;
-               <th:block th:if="${review.existsReviewByBookId(book.getId())}">
-                   <th:block th:text="${review.findByBookID(book.getId()).getScore()}"></th:block>
-               </th:block>
+
+               <th:block th:each="rev:${review}" th:text="${rev.getScore()}"></th:block>
 
                <a th:href="@{/books/edit/{id}(id=${book.getId()})}">
                    <input type="button" value="Edit">&emsp;
@@ -46,7 +45,16 @@
 
        <button type="button" onclick="filterBooks()">Filter</button>
        <br/>
+       <a th:href="@{/books/best-review}">
+           <input type="button" value="See best review book">
+       </a>
+       <br/>
        <input type='submit' value='Submit'>
+
+
+       <label th:if="flag">Best Reviewed book:</label>
+       <br/>
+       <th:block th:it="flag" th:text="${book}"></th:block> <th:block th:if="${flag}" th:text="${review}"></th:block>
    </form>
     <script>
         function filterBooks() {

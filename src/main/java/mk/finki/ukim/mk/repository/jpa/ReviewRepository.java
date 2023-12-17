@@ -17,7 +17,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     @Override
     <S extends Review> S save(S entity);
     @Query("select r from Review r where r.book.id = :bookId")
-    Review findByBookID(@Param("bookId") Long bookId);
+    List<Review> findByBookID(@Param("bookId") Long bookId);
 
     @Override
     void deleteById(Long aLong);
@@ -25,4 +25,5 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     boolean existsReviewByBookId(Long bookId);
 
     List<Review> findAll();
+
 }
